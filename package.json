@@ -1,0 +1,17 @@
+{
+  "name": "Calc",
+  "version": "1.0.0",
+  "description": "PolskaCalculator",
+  "main": "index.js",
+  "scripts":{
+    "test":"mocha"
+  },
+  "author": "Ihor",
+  "license": "MIT",
+  "directories":{
+    "test":"test"
+  },
+  "devDependencies": {
+    "mocha": "^3.5.0"
+  }
+}

@@ -191,8 +191,3 @@ var Calculator=
 };
 
 module.exports=Calculator;
-
-//-1/2 + (-5.5 - 4.7) * 5.1
-
-//debugger;
-//let y =  Calculate("(1/2 + 5 + 4*5");

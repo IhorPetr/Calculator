@@ -1,2 +1,1 @@
-![Result Test building using Travis](http://url/to/img.pnghttps://raw.github.com/IhorPetr/Calculator
-/master/Screenshots/Test.PNG)
+![Result Test building using Travis](https://github.com/IhorPetr/Calculator/master/Screenshots/Test.PNG)

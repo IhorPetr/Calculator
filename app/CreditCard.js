@@ -69,15 +69,13 @@ function isCreditCardValid(input)
         var mytreest =  str.match(/[\d]/g);
         var last = mytreest.pop();
         mytreest.reverse();
+        var count =0;
         mytreest.forEach(function (item) {
             if(item%2!=0)
             {
                 item*=2;
                 item = item>9 ? item-=9 : item;
             }
-        });
-        var count =0;
-        mytreest.forEach(function (item) {
             count+=parseInt(item);
         });
         return count%10 == last ? true : false;

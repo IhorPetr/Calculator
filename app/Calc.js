@@ -4,7 +4,7 @@
 var Calculator=
     function Calculate(input)
 {
-    if(Vakidator(input)) {
+    if(Validator(input)) {
 
         let output = GetExpression(input);
         // let y = evaluate(output);
@@ -13,25 +13,25 @@ var Calculator=
     }
     return undefined;
 
-    function Vakidator(input)
+    function Validator(input)
     {
         var regexp = /[\+\-\*\(\)\./]/ig;
-        var skob1=0,skob2=0;
+        var bracket1=0,bracket2=0;
         if(input.match(/[^\d\s\+\-\*\(\)\./]/g)!=null)
         {
              return false;
         }
         while (result = regexp.exec(input)) {
-            skob1 =result[0]=='(' ? ++skob1 : skob1;
-            skob2= result[0]==')' ? ++skob2 : skob2;
+            bracket1 =result[0]=='(' ? ++skob1 : skob1;
+            bracket2= result[0]==')' ? ++skob2 : skob2;
             if(IsOperator(input[result.index+1]) &&
                 input[result.index]!='(' && input[result.index]!=')')
             {
                 return false;
             }
         }
-        if(skob1!=0 || skob2!=0) {
-            if (skob1 != skob2) {
+        if(bracket1!=0 || bracket2!=0) {
+            if (bracket1 != bracket2) {
                 return false;
             }
         }

@@ -44,6 +44,14 @@ function isCreditCardValid(input)
             error: 'odd final number'
         } ;
     }
+    if(!LuhnAlgo(input))
+    {
+        return {
+            valid: false,
+            number: input,
+            error: 'Invalid by Luhno Algoritm'
+        } ;
+    }
     return {
         valid: true,
         number: input
@@ -55,5 +63,21 @@ function isCreditCardValid(input)
             sum += parseInt(string[i],10);
         }
         return sum;
+    }
+    function LuhnAlgo(str) {
+        debugger;
+        var mytreest =  str.match(/[\d]/g);
+        var last = mytreest.pop();
+        mytreest.reverse();
+        var count =0;
+        mytreest.forEach(function (item) {
+            if(item%2!=0)
+            {
+                item*=2;
+                item = item>9 ? item-=9 : item;
+            }
+            count+=parseInt(item);
+        });
+        return count%10 == last ? true : false;
     }
 }

@@ -2,31 +2,28 @@
  * Created by Igor on 04.09.2017.
  */
 var Calculator=
-    function Calculate(input)
-{
-    if(Validator(input)) {
+function (input) {
 
+    if(Validator(input)) {
         let output = GetExpression(input);
-        // let y = evaluate(output);
-        let result = Counting(output);
+        let result = CountingExpression(output);
         return Number((result).toFixed(2));
     }
     return undefined;
 
-    function Validator(input)
-    {
+    function Validator(input) {
+
         var regexp = /[\+\-\*\(\)\./]/ig;
         var bracket1=0,bracket2=0;
-        if(input.match(/[^\d\s\+\-\*\(\)\./]/g)!=null)
-        {
+
+        if(input.match(/[^\d\s\+\-\*\(\)\./]/g)!=null) {
              return false;
         }
         while (result = regexp.exec(input)) {
-            bracket1 =result[0]=='(' ? ++skob1 : skob1;
-            bracket2= result[0]==')' ? ++skob2 : skob2;
+            bracket1 =result[0]=='(' ? ++bracket1 : bracket1;
+            bracket2= result[0]==')' ? ++bracket2 : bracket2;
             if(IsOperator(input[result.index+1]) &&
-                input[result.index]!='(' && input[result.index]!=')')
-            {
+                input[result.index]!='(' && input[result.index]!=')') {
                 return false;
             }
         }
@@ -35,112 +32,57 @@ var Calculator=
                 return false;
             }
         }
-
         return true;
     }
 
-
-    function GetExpression(input)
-    {
-        let output = "";
+    function GetExpression(input) {
+        let expression= input.match(/-?\d+(\.\d+)?|\+|\-|\*|\(|\)|\//g);
+        let output = [];
         let operStack= [];
-        for(let i=0;i<input.length;i++)
-        {
-            if(IsDelimeter(input[i]))
-                continue;
-            if(isFinite(input[i]) && !IsDelimeter(input[i]))
-            {
-                while (!IsDelimeter(input[i]) && !IsOperator(input[i]))
-                {
-                    output += input[i];
-                    i++;
 
-                    if (i == input.length) break;
-                }
-                output += " ";
-                i--;
-            }
-            if(isFinite(input[i+1]) && !IsDelimeter(input[i+1]) && input[i]=='-')
-            {
-                output += input[i];
-                i++;
-                while (!IsDelimeter(input[i]) && !IsOperator(input[i]))
-                {
-                    output += input[i];
-                    i++;
+        for(let i=0;i<expression.length;i++) {
 
-                    if (i == input.length) break;
-                }
-                output += " ";
-                i--;
+            if(isFinite(expression[i])) {
+                output.push(expression[i]);
             }
 
-
-            if (IsOperator(input[i])) {
-                if (input[i] == '(') {
-                    //output += input[i];
-                    operStack.push(input[i]);
+            if (IsOperator(expression[i])) {
+                if (expression[i] == '(') {
+                    operStack.push(expression[i]);
                 }
-                else if (input[i] == ')')
-                {
+                else if (expression[i] == ')') {
                     let s = operStack.pop();
 
-                    while (s != '(')
-                    {
-                        output += s + ' ';
+                    while (s != '(') {
+                        output.push(s);
                         s = operStack.pop();
                     }
-                   // output += input[i];
-                }
-                else
-                {
-                    if (operStack.length > 0)
-                        if (GetPriority(input[i]) <= GetPriority(operStack[operStack.length-1]))
-                            output += operStack.pop() + " ";
+                } else {
 
-                    operStack.push(input[i]);
+                    if (operStack.length > 0)
+                        if (GetPriority(expression[i]) <= GetPriority(operStack[operStack.length-1]))
+                            output.push(operStack.pop());
+
+                    operStack.push(expression[i]);
                 }
             }
         }
         while (operStack.length > 0)
-            output += operStack.pop() + " ";
+            output.push(operStack.pop());
 
         return output;
     }
-    function Counting(input)
-    {
+
+    function CountingExpression(input) {
         let result=0;
         let temp=[];
-        for(let i=0;i<input.length;i++)
-        {
-            if(isFinite(input[i]) && !IsDelimeter(input[i]))
-            {
-                let a = "";
-                while (!IsDelimeter(input[i]) && !IsOperator(input[i]))
-                {
-                    a += input[i]; //Добавляем
-                    i++;
-                    if (i == input.length) break;
-                }
-                temp.push(parseFloat(a));
-                i--;
+
+        for(let i=0;i<input.length;i++) {
+
+            if(isFinite(input[i])) {
+                temp.push(parseFloat(input[i]));
             }
-            if(isFinite(input[i+1]) && !IsDelimeter(input[i+1]) && input[i]=='-')
-            {
-                let a = "";
-                a += input[i]; //Добавляем
-                i++;
-                while (!IsDelimeter(input[i]) && !IsOperator(input[i]))
-                {
-                    a += input[i]; //Добавляем
-                    i++;
-                    if (i == input.length) break;
-                }
-                temp.push(parseFloat(a));
-                i--;
-            }
-            else if (IsOperator(input[i]))
-            {
+            else if (IsOperator(input[i])) {
                 let a = temp.pop();
                 let b = temp.pop();
 
@@ -154,28 +96,20 @@ var Calculator=
                 temp.push(result);
             }
         }
-        if(temp.length>1)
-        {
-            while (temp.length > 0)
-            {
+        if(temp.length>1) {
+            while (temp.length > 0) {
                 result+=parseFloat(temp.pop());
             }
             temp.push(result);
         }
         return temp[temp.length-1];
     }
-    function IsDelimeter(c)
-    {
-        let delim = " =".indexOf(c);
-        return delim!=-1 ? true : false;
-    }
-    function IsOperator(c)
-    {
+
+    function IsOperator(c) {
         let delim = "+-/*()".indexOf(c);
         return delim!=-1 ? true : false;
     }
-    function GetPriority(s)
-    {
+    function GetPriority(s) {
         switch (s)
         {
             case '(': return 0;
@@ -187,7 +121,7 @@ var Calculator=
             default: return 6;
         }
     }
-
 };
 
 module.exports=Calculator;
+

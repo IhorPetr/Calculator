@@ -3,67 +3,76 @@
  */
 function isCreditCardValid(input)
 {
-    if(input.match(/[^\d\-]/g)!=null)
-    {
+    if(CardValidator(input)) {
         return {
             valid: false,
             number: input,
             error: 'invalid characters'
         } ;
     }
-    if(input.match(/[\d]/g).length>16)
-    {
+    if(Check16Symbol(input)) {
         return {
             valid: false,
             number: input,
             error: 'More than 16 digit'
         } ;
     }
-    if(/^\D*(\d)(?:\D*|\1)*$/.test(input))
-    {
+    if(CheckSameSymbol(input)) {
         return {
             valid: false,
             number: input,
             error: 'only one type of number'
         } ;
     }
-
-    if(add(input.split('-').reduce((a,b)=>a+b,0))<16)
-    {
+    if(ChechSum(input)) {
         return {
             valid: false,
             number: input,
             error: 'Sum less than 16'
         } ;
     }
-    if(input[input.length]%2!=0)
-    {
+    if(CheckOddNumber(input)) {
         return {
             valid: false,
             number: input,
             error: 'odd final number'
         } ;
     }
-    if(!LuhnAlgo(input))
-    {
+    if(!LuhnAlgo(input)) {
         return {
             valid: false,
             number: input,
             error: 'Invalid by Luhno Algoritm'
-        } ;
+        };
     }
     return {
         valid: true,
         number: input
     };
-    function add(string) {
+
+    function CardValidator(input) {
+       return input.match(/[^\d\-]/g)!=null ? false : true;
+    }
+    function Check16Symbol(input){
+        return input.match(/[\d]/g).length>16 ? false : true;
+    }
+    function CheckSameSymbol(input){
+        return /^\D*(\d)(?:\D*|\1)*$/.test(input) ? false : true;
+    }
+    function CheckOddNumber(input){
+        return input[input.length]%2!=0 ? false : true;
+    }
+
+    function ChechSum(input) {
+        var string =  input.split('-').reduce((a,b)=>a+b,0);
         string = string.split('');
         var sum = 0;
         for (var i = 0; i < string.length; i++) {
             sum += parseInt(string[i],10);
         }
-        return sum;
+        return sum<16 ? false : true;
     }
+
     function LuhnAlgo(str) {
         debugger;
         var mytreest =  str.match(/[\d]/g);

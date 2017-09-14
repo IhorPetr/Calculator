@@ -96,13 +96,10 @@ function (input) {
                 temp.push(result);
             }
         }
-        if(temp.length>1) {
-            while (temp.length > 0) {
-                result+=parseFloat(temp.pop());
-            }
-            temp.push(result);
-        }
-        return temp[temp.length-1];
+        result = temp.reduce(function(sum, current) {
+            return sum + current;
+        }, 0);
+        return result;
     }
 
     function IsOperator(c) {

@@ -74,7 +74,6 @@ function isCreditCardValid(input)
     }
 
     function LuhnAlgo(str) {
-        debugger;
         var mytreest =  str.match(/[\d]/g);
         var last = mytreest.pop();
         mytreest.reverse();
